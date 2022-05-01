@@ -1,0 +1,65 @@
+//Para instalacion:
+//npm i -D prisma
+//npm i @prisma/client
+//npx prisma format => para formatear
+//npx prisma db push => cambios para la base de datos
+//npx prisma generate
+
+generator client {
+
+  provider        = "prisma-client-js"
+  previewFeatures = ["referentialIntegrity"]
+
+}
+
+datasource db {
+  provider             = "mysql"
+  url                  = env("DATABASE_URL")
+  referentialIntegrity = "prisma"
+}
+
+//model Pet {
+//  id     Int      @id @default(autoincrement())
+//  name   String   @db.VarChar(60)
+//  type   String   @db.VarChar(60)
+//  birth  DateTime @db.Date()
+//  photo  String?  @db.VarChar(255) // ? = string o nulo
+//  user   User?    @relation(fields: [userId], references: [id])
+// userId Int?
+
+//  @@unique([name, userId])
+//  @@map("pets")
+
+//}
+
+model Task {
+  id      Int     @id @default(autoincrement())
+  title   String  @db.VarChar(255)
+  content String  @db.VarChar(255)
+  done    Boolean @db.TinyInt
+  user    User?   @relation(fields: [userId], references: id)
+  userId  Int?
+
+  @@unique([title, userId])
+  @@map("tasks")
+}
+
+//model User {
+//id       Int    @id @default(autoincrement())
+//email    String @unique @db.VarChar(255)
+//password String @db.VarChar(255)
+//pets     Pet[]
+
+//@@map("users")
+//}
+
+model User {
+  id        Int    @id @default(autoincrement())
+  firstName String @db.VarChar(255)
+  lastName  String @db.VarChar(255)
+  email     String @unique @db.VarChar(255)
+  password  String @db.VarChar(255)
+  tasks     Task[]
+
+  @@map("users")
+}
