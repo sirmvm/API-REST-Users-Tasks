@@ -3,7 +3,11 @@ import { verifyToken } from "../lib/jwt";
 
 const MISSING_AUTH_MSG = 'Missing authorization header';
 
-export default function tokenValidator(){
+interface tokenValidatorOptions { //Para validar al admin
+    adminOnly?: boolean;
+}
+
+export default function tokenValidator(options?: tokenValidatorOptions) {
   return function (req:Request,res:Response, next:NextFunction) {
     const authHeader = req.headers.authorization;
     if(!authHeader){
@@ -22,6 +26,10 @@ export default function tokenValidator(){
       req.user = tokenPayload
     }catch{
       res.status(401).json({message:MISSING_AUTH_MSG});
+      return
+    }
+    if (options?.adminOnly && !req.user.admin) {
+      res.status(403).json({message:'You are not an admin'});
       return
     }
 

@@ -38,6 +38,7 @@ model User {
   lastName  String @db.VarChar(255)
   email     String @unique @db.VarChar(255)
   password  String @db.VarChar(255)
+  //nameGit String @db.VarChar(255)
   tasks     Task[]
 
   @@map("users")

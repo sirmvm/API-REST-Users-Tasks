@@ -14,6 +14,8 @@ export default class TaskController{
   public readonly getAll = async (req:Request, res:Response) => {
     const user = req.user as UserTokenPayload
     const repository = new TaskRepository(user.sub)
+    const done = req.query.done
+    
     try {
       const tasks : TaskDTO[] = await repository.findAll()	
       res.json(tasks)
